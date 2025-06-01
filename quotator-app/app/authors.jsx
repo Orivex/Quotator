@@ -11,7 +11,7 @@ const Authors = () => {
 
     const [authors, setAuthors] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const db = SQLite.openDatabaseSync('quotes.db');
+    const db = SQLite.useSQLiteContext()
     
     const loadAuthors = async () => {
         try {
@@ -95,9 +95,10 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: Colors.appBlue.text,
-        fontFamily: FontFamilies.baseFontFamily,
+        fontFamily: FontFamilies.baseFont,
         paddingHorizontal: 20,
-        textAlign: "center"
+        textAlign: "center",
+        fontSize: 15
     }
     
 })

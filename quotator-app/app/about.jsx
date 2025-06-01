@@ -3,6 +3,7 @@ import React from 'react'
 import logo from "@/assets/images/logo.png"
 import { Colors } from '@/constants/Colors'
 import toRGBA from './toRGBA'
+import { FontFamilies } from '@/constants/FontFamilies'
 
 const About = () => {
   return (
@@ -44,7 +45,8 @@ const styles = StyleSheet.create({
   },
   info_text: {
     marginTop: 6,
-    color: Colors.appBlue.text
+    color: Colors.appBlue.text,
+    fontFamily: FontFamilies.baseFont
   },
   image: {
     width: '100%', 

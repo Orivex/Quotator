@@ -5,6 +5,7 @@ import { SafeAreaView, Text, FlatList, View } from "react-native";
 import * as SQLite from 'expo-sqlite'
 import { useState } from "react";
 import { Colors } from "@/constants/Colors";
+import { quoteBoxStyle } from "@/constants/quoteBoxStyle";
 
 const QuotesView = ({route}) => {
     const navigation = useNavigation();
@@ -12,7 +13,7 @@ const QuotesView = ({route}) => {
 
     const [quotes, setQuotes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const db = SQLite.openDatabaseSync('quotes.db');
+    const db = SQLite.useSQLiteContext();
 
     const loadQuotes = async () => {
         try {
@@ -37,15 +38,12 @@ const QuotesView = ({route}) => {
         return ( <ActivityIndicator size='large' color='#0000f'/> ) ;
     }
 
-    const seperatorComponent = () => <View style={styles.seperatorComponent}/>
-
     return(
         <SafeAreaView style={styles.container}>
             <FlatList
                 data={quotes}
                 keyExtractor={(item, index) => index.toString()}
                 showsVerticalScrollIndicator={false} 
-                ItemSeparatorComponent={seperatorComponent}
                 contentContainerStyle={styles.contentContainer}
                 renderItem={({item}) => (
                     <View style={styles.itemContainer}>
@@ -67,24 +65,14 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.appBlue.background
     },
     contentContainer: {
-        paddingTop: 15, 
-        paddingBottom: 100,
+        paddingVertical: 60
     },
     itemContainer: {
-        maxWidth: 300,
-        marginVertical: 30,
-        alignItems: 'center',
-        marginHorizontal: 'auto'
-    },
-    seperatorComponent: {
-        height: 1,
-        backgroundColor: "rgba(0,0,0,0.1)",
-        width: '50%',
-        maxWidth: 300,
-        alignSelf: 'center',
+        width: '100%',
+        marginBottom: 30,
     },
     text: {
-        color: Colors.appBlue.text
+        ...quoteBoxStyle
     }
 
 })

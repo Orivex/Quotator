@@ -4,6 +4,7 @@ import { View } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useState } from "react";
 import * as SQLite from 'expo-sqlite'
+import { FontFamilies } from "@/constants/FontFamilies";
 
 const Add = () => {
 
@@ -15,9 +16,9 @@ const Add = () => {
         quote: '',
         author: '',
         category: ''
-    })
+    });
 
-    const db = SQLite.openDatabaseSync('quotes.db')
+    const db = SQLite.useSQLiteContext();
 
     const handleSubmit = async () => {
         try {
@@ -109,7 +110,9 @@ const styles = StyleSheet.create({
         textAlignVertical: 'top',
         marginTop: 50,
         marginBottom: 20,
-        fontSize: 16
+        fontSize: 16,
+        fontFamily: FontFamilies.baseFont,
+        borderRadius: 10
     },
     textInput_author: {
         height: 75,
@@ -118,7 +121,9 @@ const styles = StyleSheet.create({
         borderColor: Colors.appGray.background,
         color: Colors.appBlue.text,
         marginBottom: 20,
-        fontSize: 16
+        fontSize: 16,
+        fontFamily: FontFamilies.baseFont,
+        borderRadius: 10
     },
     textInput_category: {
         height: 50,
@@ -127,6 +132,8 @@ const styles = StyleSheet.create({
         borderColor: Colors.appGray.background,
         color: Colors.appBlue.text,
         marginBottom: 30,
-        fontSize: 16
+        fontSize: 16,
+        fontFamily: FontFamilies.baseFont,
+        borderRadius: 10
     },
 })

@@ -2,29 +2,12 @@ import { View, Text, StyleSheet, Pressable } from 'react-native'
 import {Link} from "expo-router"
 import { Colors } from '@/constants/Colors'
 import { FontFamilies } from '@/constants/FontFamilies'
-import { SQLiteProvider } from 'expo-sqlite'
+import { quoteBoxStyle } from '@/constants/quoteBoxStyle'
 
 const Quote = () => {
   return (
 
     <View style={styles.container}>
-      
-    <SQLiteProvider
-        databaseName='quotes.db'
-        onInit={async (db) => {
-          await db.execAsync(`
-          CREATE TABLE IF NOT EXISTS quotes (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          author TEXT NOT NULL,
-          quote TEXT NOT NULL,
-          category TEXT NOT NULL
-          );
-          PRAGMA journal_mode=WAL;
-          `)
-        } }
-        options={{ useNewConnection: false }} children={undefined}>
-    </SQLiteProvider>
-      
       <View 
         style = {styles.quoteContainer}
       >
@@ -35,7 +18,7 @@ const Quote = () => {
       </View>
 
       <View style={styles.buttonContainer}>
-        <Link href="/authors" style={{marginHorizontal: "auto"}} asChild>
+        <Link href="/menu" style={{marginHorizontal: "auto"}} asChild>
           <Pressable style={styles.button}>
             <Text style={styles.buttonText}> Menu </Text>
           </Pressable>
@@ -69,14 +52,8 @@ const styles = StyleSheet.create({
     backgroundColor: Colors.appBlue.background
   },
   quoteText: {
-    width: '100%',
-    fontFamily: "sans-serif-light",
-    color: Colors.appBlue.text,
-    fontSize: 25,
-    textAlign: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.05)',
-    paddingHorizontal: 4,
-    paddingVertical: 75
+    ...quoteBoxStyle,
+    minHeight: 150
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -91,7 +68,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: Colors.appBlue.text,
-    fontFamily: FontFamilies.baseFontFamily,
+    fontFamily: FontFamilies.baseFont,
     textAlign: 'center',
     fontSize: 25
   }
