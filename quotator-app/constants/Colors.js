@@ -35,7 +35,8 @@ export const Colors = {
     // tabIconSelected: tintColorDark,
   },
   appGray: {
-    background: 'rgb(189,189,189)',
-    buttonBackground: 'rgba(189,189,189, 0.5)'
+    base: 'rgb(189,189,189)',
+    base05: 'rgba(189,189,189, 0.5)',
+    base025: 'rgba(189,189,189, 0.25)'
   }
 };

@@ -10,9 +10,9 @@ const Menu = () => {
     const navigation = useNavigation()
 
     const menu1 = [
-        { label: 'All quotes', action: () => {}}, // TODO
-        { label: 'Authors', action: () => {navigation.navigate("authors")}},
-        { label: 'Categories', action: () => {navigation.navigate("categories")}}
+        { label: 'All quotes', action: () => {navigation.navigate('quotesView', {criteria: 'byNothing'})}}, // TODO
+        { label: 'Authors', action: () => {navigation.navigate('filterView', {filter: 'authors'})}},
+        { label: 'Categories', action: () => {navigation.navigate('filterView', {filter: 'categories'})}}
     ]
 
     const menu2 = [
@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
     },
     menuContainer: {
         width: '80%',
-        backgroundColor: Colors.appGray.buttonBackground,
+        backgroundColor: Colors.appGray.base05,
         borderRadius: 20,
         alignItems: 'center',
         marginBottom: 30

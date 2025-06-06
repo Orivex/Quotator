@@ -13,6 +13,6 @@
     "**/*.tsx",
     "**/*.jsx",
     ".expo/types/**/*.ts",
-    "expo-env.d.ts"
-, "app/authors.jsx", "constants/FontFamilies.js", "constants/Colors.js", "constants/quoteBoxStyle.js"  ]
+    "expo-env.d.ts",
+    "constants/FontFamilies.js", "constants/Colors.js", "constants/quoteBoxStyle.js"  ]
 }

@@ -1,13 +1,11 @@
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
-import { Appearance } from 'react-native';
 import { Colors } from '@/constants/Colors';
-import { useColorScheme } from '@/hooks/useColorScheme';
 import { SQLiteProvider } from 'expo-sqlite';
+import { NavigationContainer } from '@react-navigation/native';
 
 export default function RootLayout() {
-  const colorScheme = Appearance.getColorScheme();
-  const theme = colorScheme == 'dark' ? Colors.dark: Colors.light;
+
   const [loaded] = useFonts({
     SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
   });
@@ -32,15 +30,16 @@ export default function RootLayout() {
         PRAGMA journal_mode=WAL;
         `)
       } }
-      options={{ useNewConnection: true }} children={undefined}>
+      options={{ useNewConnection: true }}>
 
-      <Stack screenOptions={{headerStyle: {backgroundColor: theme.headerBackground}, headerTintColor: theme.text, headerShadowVisible: false}}>
+      <Stack screenOptions={{headerStyle: {backgroundColor: Colors.appBlue.background},
+            headerTintColor: Colors.appBlue.text, headerShadowVisible: false}}>
         <Stack.Screen name="quote" options={{title: "Quote", headerShown: false}}/>
-        <Stack.Screen name="menu" options={{title: "Menu", headerStyle: {backgroundColor: Colors.appBlue.background}, headerTintColor: Colors.appBlue.text}}/>
-        <Stack.Screen name="authors" options={{title: "Authors", headerStyle: {backgroundColor: Colors.appBlue.background}, headerTintColor: Colors.appBlue.text}}/>
-        <Stack.Screen name="about" options={{title: "About", headerStyle: {backgroundColor: Colors.appBlue.background}, headerTintColor: Colors.appBlue.text}}/>
-        <Stack.Screen name="add" options={{title: "Add", headerTitle: "Add quote", headerStyle: {backgroundColor: Colors.appBlue.background}, headerTintColor: Colors.appBlue.text}}/>
-        <Stack.Screen name="quotesView" options={{title: "Quotes", headerStyle: {backgroundColor: Colors.appBlue.background}, headerTintColor: Colors.appBlue.text}}/>
+        <Stack.Screen name="menu" options={{title: "Menu"}}/>
+        <Stack.Screen name="filterView" options={{title: "Filter"}}/>
+        <Stack.Screen name="about" options={{title: "About"}}/>
+        <Stack.Screen name="quoteForm" options={{title: "Form"}}/>
+        <Stack.Screen name="quotesView" options={{title: "Quotes"}}/>
         <Stack.Screen name="+not-found" />
       </Stack>
 

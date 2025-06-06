@@ -1,10 +1,30 @@
 import { View, Text, StyleSheet, Pressable } from 'react-native'
-import {Link} from "expo-router"
+import { useNavigation } from '@react-navigation/native'
 import { Colors } from '@/constants/Colors'
 import { FontFamilies } from '@/constants/FontFamilies'
 import { quoteBoxStyle } from '@/constants/quoteBoxStyle'
+import { useSQLiteContext } from 'expo-sqlite'
+import { useEffect, useState } from 'react'
 
 const Quote = () => {
+  const navigation = useNavigation();
+
+  const db = useSQLiteContext();
+
+  const [randomQuote, setRandomQuote] = useState({quote: '', author: ''});
+
+  useEffect(() => {
+    const loadRandomQuote = async () => {
+      const result = await db.getAllAsync('SELECT quote, author FROM quotes ORDER BY RANDOM() LIMIT 1');
+      setRandomQuote(result[0])
+    };
+
+    loadRandomQuote();
+  }, [])
+
+  console.log(randomQuote)
+
+
   return (
 
     <View style={styles.container}>
@@ -12,23 +32,23 @@ const Quote = () => {
         style = {styles.quoteContainer}
       >
         <Text style = {styles.quoteText}>
-          "Das Leid von heute ist die Kraft von morgen"
+          "{randomQuote.quote}"
+        </Text>
+
+        <Text style = {styles.authorText}>
+          - {randomQuote.author}
         </Text>
 
       </View>
 
       <View style={styles.buttonContainer}>
-        <Link href="/menu" style={{marginHorizontal: "auto"}} asChild>
-          <Pressable style={styles.button}>
+          <Pressable style={styles.button} onPress={() => navigation.navigate('menu')} >
             <Text style={styles.buttonText}> Menu </Text>
           </Pressable>
-        </Link>
 
-        <Link href="/add" style={{marginHorizontal: "auto"}} asChild>
-          <Pressable style={styles.button}>
-            <Text style={styles.buttonText}> Add </Text>
-          </Pressable>
-        </Link>
+        <Pressable style={styles.button} onPress={() => navigation.navigate('quoteForm', {id: null})}>
+          <Text style={styles.buttonText}> Add </Text>
+        </Pressable>
       </View>
 
     </View>
@@ -46,14 +66,14 @@ const styles = StyleSheet.create({
     paddingVertical: 50,
   },
   quoteContainer: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: Colors.appBlue.background
+    ...quoteBoxStyle.quoteContainer,
+    marginTop: 200
   },
   quoteText: {
-    ...quoteBoxStyle,
-    minHeight: 150
+    ...quoteBoxStyle.quoteText
+  },
+  authorText: {
+    ...quoteBoxStyle.authorText
   },
   buttonContainer: {
     flexDirection: 'row',
@@ -62,9 +82,10 @@ const styles = StyleSheet.create({
     height: 60,
     width: 120,
     borderRadius: 50,
-    backgroundColor: Colors.appGray.buttonBackground,
+    backgroundColor: Colors.appGray.base05,
     justifyContent: "center",
     marginBottom: 50,
+    marginHorizontal: 'auto'
   },
   buttonText: {
     color: Colors.appBlue.text,
