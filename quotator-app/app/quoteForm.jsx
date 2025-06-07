@@ -57,7 +57,7 @@ const QuoteForm = () => {
             }
             else {
                 await db.runAsync(
-                    'INSERT INTO quotes (quote, author, category) VALUES (?, ?, ?)',
+                    'INSERT INTO quotes (quote, author, category, neverShow) VALUES (?, ?, ?, false)',
                     [form.quote, form.author, finalCategory]
                 );
 

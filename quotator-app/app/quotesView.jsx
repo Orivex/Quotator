@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import { ActivityIndicator, Alert, Pressable, StyleSheet } from "react-native";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { ActivityIndicator, Alert, Pressable, StyleSheet, useAnimatedValue, Animated } from "react-native";
+import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native";
 import { Text, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as SQLite from 'expo-sqlite'
@@ -9,6 +9,7 @@ import { Colors } from "@/constants/Colors";
 import { quoteBoxStyle } from "@/constants/quoteBoxStyle";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Entypo from '@expo/vector-icons/Entypo';
+import { pressInAnim, pressOutAnim  } from './helper/animations'
 
 const QuotesView = () => {
     const navigation = useNavigation();
@@ -16,7 +17,14 @@ const QuotesView = () => {
 
     const [quotes, setQuotes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [neverShowMap, setNeverShowMap] = useState({});
+
     const db = SQLite.useSQLiteContext();
+
+    // For animations:
+    const scaleNeverShow = useAnimatedValue(1);
+    const scaleEdit = useAnimatedValue(1);
+    const scaleDelete = useAnimatedValue(1);
 
     const loadQuotes = async () => {
         try {
@@ -35,6 +43,13 @@ const QuotesView = () => {
             }      
                          
             setQuotes(results);
+
+            const map = {};
+            results.forEach(q => {
+                map[q.id] = q.neverShow;
+            });
+
+            setNeverShowMap(map);
         }
         catch (error){
             console.error(error);
@@ -44,21 +59,26 @@ const QuotesView = () => {
         }
     }
 
-    loadQuotes();
+    useFocusEffect(
+      React.useCallback(() => {
+        loadQuotes();
+      }, [])
+    );
         
     if(isLoading) {
         return ( <ActivityIndicator size='large' color='#0000f'/> ) ;
     }
 
-    const editQuote = ({id}) => {
+    const editQuote = (id) => {
         navigation.navigate('quoteForm', {id});
     }
 
     const deleteQuote = async (id) => {
         await db.runAsync(`DELETE FROM quotes WHERE id = '${id}'`);
+        loadQuotes();
     }
 
-    const deleteQuoteAsk = ({id}) => {
+    const deleteQuoteAsk = (id) => {
         Alert.alert('Quote deletion', 'Are you sure that you want to delete that quote?', [
             {
                 text: 'No',
@@ -71,6 +91,38 @@ const QuotesView = () => {
         ])
     }
 
+    const toggleNeverShow = async (id, isNeverShown) => {
+        const newIsNeverShown = isNeverShown == 1 ? 0: 1;
+
+        await db.runAsync(`UPDATE quotes SET neverShow=${newIsNeverShown} WHERE id='${id}'`)
+
+        setNeverShowMap(prevMap => ({
+            ...prevMap,
+            [id]: newIsNeverShown
+        }))
+    }
+
+    const neverShowAsk = (id) => {
+        
+        const isNeverShown = neverShowMap[id];
+
+        if(isNeverShown == false) {
+            Alert.alert('Never show on home screen?', 'If you click Yes then this quote will never be shown on the home screen', [
+                {
+                    text: 'No',
+                    style: 'cancel'
+                },
+                {
+                    text: 'Yes',
+                    onPress: () => {toggleNeverShow(id, isNeverShown)}
+                }
+            ])
+        }
+        else {
+            toggleNeverShow(id, isNeverShown);
+        }
+    }
+
     return(
         <SafeAreaView style={styles.container}>
             <FlatList
@@ -81,17 +133,23 @@ const QuotesView = () => {
                 renderItem={({item}) => (
                     <View style={styles.quoteContainer}>
                         <View style={styles.changeContainer}>
-                            <Pressable>
-                                <Entypo name="eye-with-line" size={35} color="black"  style={styles.icon}/>
-                            </Pressable>
+                            <Animated.View style={{transform: [{scale: scaleNeverShow}]}}>
+                                <Pressable onPress={()=>{neverShowAsk(item.id)}} onPressIn={()=>{pressInAnim(scaleNeverShow)}} onPressOut={()=>{pressOutAnim(scaleNeverShow)}}>
+                                    <Entypo name="eye-with-line" size={35} color={neverShowMap[item.id] == 1? 'red': Colors.appGray.base} />
+                                </Pressable>
+                            </Animated.View>
 
-                            <Pressable onPress={() => {editQuote({id: item.id})}}>
-                                <MaterialIcons name="edit" size={35} color="black"  style={styles.icon}/>
-                            </Pressable>
+                            <Animated.View style={{transform: [{scale: scaleEdit}]}}>
+                                <Pressable onPress={() => {editQuote(item.id)}}  onPressIn={()=>{pressInAnim(scaleEdit)}} onPressOut={()=>{pressOutAnim(scaleEdit)}}>
+                                    <MaterialIcons name="edit" size={35} color={Colors.appGray.base}/>
+                                </Pressable>
+                            </Animated.View>
 
-                            <Pressable onPress={() => {deleteQuoteAsk({id: item.id})}}>
-                                <MaterialIcons name="delete" size={35} color="black" style={styles.icon} />
-                            </Pressable>
+                            <Animated.View style={{transform: [{scale: scaleDelete}]}}>
+                                <Pressable onPress={() => {deleteQuoteAsk(item.id)}}  onPressIn={()=>{pressInAnim(scaleDelete)}} onPressOut={()=>{pressOutAnim(scaleDelete)}}>
+                                    <MaterialIcons name="delete" size={35} color={Colors.appGray.base} />
+                                </Pressable>
+                            </Animated.View>
 
                         </View>
 
@@ -134,8 +192,5 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         paddingLeft: 10
     },
-    icon: {
-        color: Colors.appGray.base
-    }
 
 })

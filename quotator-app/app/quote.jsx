@@ -6,8 +6,8 @@ import { quoteBoxStyle } from '@/constants/quoteBoxStyle'
 import { useSQLiteContext } from 'expo-sqlite'
 import { useEffect, useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
-import Entypo from '@expo/vector-icons/Entypo';
 import Feather from '@expo/vector-icons/Feather';
+import { pressInAnim, pressOutAnim } from './helper/animations.js'
 
 const Quote = () => {
   const navigation = useNavigation();
@@ -19,7 +19,7 @@ const Quote = () => {
 
   useEffect(() => {
     const loadRandomQuote = async () => {
-      const result = await db.getAllAsync(`SELECT id, quote, author FROM quotes WHERE id!='${randomQuote.id}' ORDER BY RANDOM() LIMIT 1`);
+      const result = await db.getAllAsync(`SELECT id, quote, author FROM quotes WHERE id!='${randomQuote.id}' AND neverShow = 0 ORDER BY RANDOM() LIMIT 1`);
       if(result.length > 0) {
         setRandomQuote(result[0])
       }
@@ -34,6 +34,7 @@ const Quote = () => {
 
   const [menuVisible, setMenuVisible] = useState(false);
   const menuOpacity = useAnimatedValue(0);
+
 
   const homeMenu = () => {
     if(menuVisible) {
@@ -60,22 +61,6 @@ const Quote = () => {
   const scaleAdd = useAnimatedValue(1);
   const scaleReload = useAnimatedValue(1);
 
-  const pressInAnim = (scale) => {
-    Animated.timing(scale, {
-      toValue: 0.75,
-      duration: 100,
-      useNativeDriver: true
-    }).start();
-  };
-
-  const pressOutAnim = (scale) => {
-    Animated.timing(scale, {
-      toValue: 1,
-      duration: 200,
-      useNativeDriver: true
-    }).start();
-  };
-
   const rotation = useAnimatedValue(0);
   const rotationString = rotation.interpolate({
     inputRange: [0, 360],
@@ -91,7 +76,6 @@ const Quote = () => {
     }).start();
   }
 
-
   return (
 
     <View style={styles.container}>
@@ -103,7 +87,7 @@ const Quote = () => {
                 <Ionicons name="reload-circle" size={60} color={Colors.appGray.base} />
             </Pressable>
         </Animated.View>
-
+    
         <View style = {styles.quoteContainer}>
           <Text style = {styles.quoteText} adjustsFontSizeToFit={true} numberOfLines={8}>
             "{randomQuote.quote}"

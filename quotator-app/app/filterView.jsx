@@ -1,10 +1,11 @@
-import { StyleSheet, FlatList, View, Text, Pressable, ActivityIndicator } from "react-native";
+import { StyleSheet, FlatList, View, Text, Pressable, ActivityIndicator, Animated, useAnimatedValue } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { FontFamilies } from "@/constants/FontFamilies";
 import { useEffect, useState } from 'react'
 import * as SQLite from 'expo-sqlite'
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { pressInAnim, pressOutAnim } from "./helper/animations";
 
 const FilterView = () => {
 
@@ -13,7 +14,10 @@ const FilterView = () => {
 
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-    const db = SQLite.useSQLiteContext()
+    const db = SQLite.useSQLiteContext();
+
+    //For animations:
+    const scaleButton = useAnimatedValue(1);
     
     const loadData = async () => {
         try {
@@ -48,15 +52,16 @@ const FilterView = () => {
             ItemSeparatorComponent={seperatorComponent}
             contentContainerStyle={styles.contentContainer}
             renderItem={({item}) => (
-                <View style={styles.itemContainer}>
+                <Animated.View style={[styles.itemContainer, {transform: [{scale: scaleButton}]}]}>
                 <Pressable
                     style={styles.button}
                     onPress={() => {navigation.navigate('quotesView', {criteria: (filter == 'authors' ? 'byAuthor': 'byCategory'), data: item});
                     }}
+                     onPressIn={()=>{pressInAnim(scaleButton)}} onPressOut={()=>{pressOutAnim(scaleButton)}}
                     >
                     <Text style={styles.buttonText}>{item}</Text>
                 </Pressable>
-                </View>
+                </Animated.View>
             )}
             ListEmptyComponent={<Text style={{alignSelf: 'center'}}>No data found</Text>}
             />

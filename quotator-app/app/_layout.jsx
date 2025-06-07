@@ -2,7 +2,7 @@ import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import { SQLiteProvider } from 'expo-sqlite';
-import { NavigationContainer } from '@react-navigation/native';
+
 
 export default function RootLayout() {
 
@@ -25,7 +25,8 @@ export default function RootLayout() {
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         author TEXT NOT NULL,
         quote TEXT NOT NULL,
-        category TEXT NOT NULL
+        category TEXT NOT NULL,
+        neverShow BOOLEAN NOT NULL
         );
         PRAGMA journal_mode=WAL;
         `)
