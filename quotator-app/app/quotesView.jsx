@@ -1,5 +1,4 @@
-import React, { useEffect } from "react";
-import { ActivityIndicator, Alert, Pressable, StyleSheet, useAnimatedValue, Animated } from "react-native";
+import { ActivityIndicator, Alert, StyleSheet, Modal} from "react-native";
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native";
 import { Text, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -9,7 +8,7 @@ import { Colors } from "@/constants/Colors";
 import { quoteBoxStyle } from "@/constants/quoteBoxStyle";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Entypo from '@expo/vector-icons/Entypo';
-import { pressInAnim, pressOutAnim  } from './helper/animations'
+import AnimatedButton from "./helper/AnimatedButton";
 
 const QuotesView = () => {
     const navigation = useNavigation();
@@ -19,12 +18,9 @@ const QuotesView = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [neverShowMap, setNeverShowMap] = useState({});
 
-    const db = SQLite.useSQLiteContext();
+    const [messageVisible, setMessageVisible] = useState(false);
 
-    // For animations:
-    const scaleNeverShow = useAnimatedValue(1);
-    const scaleEdit = useAnimatedValue(1);
-    const scaleDelete = useAnimatedValue(1);
+    const db = SQLite.useSQLiteContext();
 
     const loadQuotes = async () => {
         try {
@@ -86,7 +82,7 @@ const QuotesView = () => {
             },
             {
                 text: 'Yes',
-                onPress: () => {deleteQuote(id)}
+                onPress: () => {deleteQuote(id);}
             }
         ])
     }
@@ -125,6 +121,23 @@ const QuotesView = () => {
 
     return(
         <SafeAreaView style={styles.container}>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={messageVisible}
+                onRequestClose={setMessageVisible(!messageVisible)}
+                >
+                    <View style={styles.modal}>
+                        <Text> Yo whats up! This will be a generalized component! </Text>
+                            <AnimatedButton
+                            label="Close"
+                            labelFontSize={20}
+                            onPress={()=>{setMessageVisible(!messageVisible)}}
+                            />
+                    </View>
+            </Modal>
+
             <FlatList
                 data={quotes}
                 keyExtractor={(item, index) => index.toString()}
@@ -133,23 +146,24 @@ const QuotesView = () => {
                 renderItem={({item}) => (
                     <View style={styles.quoteContainer}>
                         <View style={styles.changeContainer}>
-                            <Animated.View style={{transform: [{scale: scaleNeverShow}]}}>
-                                <Pressable onPress={()=>{neverShowAsk(item.id)}} onPressIn={()=>{pressInAnim(scaleNeverShow)}} onPressOut={()=>{pressOutAnim(scaleNeverShow)}}>
-                                    <Entypo name="eye-with-line" size={35} color={neverShowMap[item.id] == 1? 'red': Colors.appGray.base} />
-                                </Pressable>
-                            </Animated.View>
 
-                            <Animated.View style={{transform: [{scale: scaleEdit}]}}>
-                                <Pressable onPress={() => {editQuote(item.id)}}  onPressIn={()=>{pressInAnim(scaleEdit)}} onPressOut={()=>{pressOutAnim(scaleEdit)}}>
-                                    <MaterialIcons name="edit" size={35} color={Colors.appGray.base}/>
-                                </Pressable>
-                            </Animated.View>
+                            <AnimatedButton
+                                useIcon={true}
+                                icon={<Entypo name="eye-with-line" size={35} color={neverShowMap[item.id] == 1? 'red': Colors.appGray.base}/>}
+                                onPress={()=>{neverShowAsk(item.id)}}
+                            />
+                            
+                            <AnimatedButton
+                                useIcon={true}
+                                icon={<MaterialIcons name="edit" size={35} color={Colors.appGray.base}/>}
+                                onPress={()=>{editQuote(item.id)}}
+                            />
 
-                            <Animated.View style={{transform: [{scale: scaleDelete}]}}>
-                                <Pressable onPress={() => {deleteQuoteAsk(item.id)}}  onPressIn={()=>{pressInAnim(scaleDelete)}} onPressOut={()=>{pressOutAnim(scaleDelete)}}>
-                                    <MaterialIcons name="delete" size={35} color={Colors.appGray.base} />
-                                </Pressable>
-                            </Animated.View>
+                            <AnimatedButton
+                                useIcon={true}
+                                icon={<MaterialIcons name="delete" size={35} color={Colors.appGray.base} />}
+                                onPress={()=>{deleteQuoteAsk(item.id)}}
+                            />
 
                         </View>
 
@@ -192,5 +206,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around',
         paddingLeft: 10
     },
+    modal: {
+        backgroundColor: 'white'
+    }
 
 })

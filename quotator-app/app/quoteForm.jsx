@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import * as SQLite from 'expo-sqlite'
 import { FontFamilies } from "@/constants/FontFamilies";
 import { useNavigation, useRoute } from "@react-navigation/native";
+import AnimatedButton from "./helper/AnimatedButton";
 
 const QuoteForm = () => {
 
@@ -54,6 +55,8 @@ const QuoteForm = () => {
                                 WHERE id=${id}`
                 );
                 navigation.goBack();
+
+                Alert.alert("Quote successfully changed!");
             }
             else {
                 await db.runAsync(
@@ -106,10 +109,12 @@ const QuoteForm = () => {
                 style={styles.textInput_category}
                 onChangeText={(text) => setForm({...form, category: text})}
             />
-            
-            <Pressable onPress={ () => handleSubmit()}>
-                <AntDesign name={editMode == true ? 'checkcircle': 'pluscircle'} size={50} color={Colors.appGray.base}/>
-            </Pressable>
+
+            <AnimatedButton
+                useIcon={true}
+                icon={<AntDesign name={editMode == true ? 'checkcircle': 'pluscircle'} size={50} color={Colors.appGray.base}/>}
+                onPress={handleSubmit}
+            />
         </View>
 
     );
