@@ -1,9 +1,9 @@
 import { StyleSheet, FlatList, View, Text, Pressable, ActivityIndicator, Animated, useAnimatedValue } from "react-native";
 import { Colors } from "@/constants/Colors";
 import { FontFamilies } from "@/constants/FontFamilies";
-import { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import * as SQLite from 'expo-sqlite'
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AnimatedButton from './helper/AnimatedButton'
 
@@ -15,7 +15,7 @@ const FilterView = () => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const db = SQLite.useSQLiteContext();
-    
+
     const loadData = async () => {
         try {
             const results = filter == 'authors' ?
@@ -31,7 +31,11 @@ const FilterView = () => {
         }
     }
     
-    loadData();
+    useFocusEffect(
+        React.useCallback(()=> {
+            loadData();
+        }, [])
+    );
     
     if(isLoading) {
         return ( <ActivityIndicator size='large' color='#0000f'/> ) ;
@@ -60,6 +64,7 @@ const FilterView = () => {
             )}
             ListEmptyComponent={<Text style={{alignSelf: 'center'}}>No data found</Text>}
             />
+
         </SafeAreaView>
     )
 }

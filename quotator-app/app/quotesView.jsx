@@ -1,24 +1,27 @@
-import { ActivityIndicator, Alert, StyleSheet, Modal} from "react-native";
+import { ActivityIndicator, Alert, StyleSheet} from "react-native";
 import { useNavigation, useRoute, useFocusEffect } from "@react-navigation/native";
 import { Text, FlatList, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import * as SQLite from 'expo-sqlite'
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Colors } from "@/constants/Colors";
 import { quoteBoxStyle } from "@/constants/quoteBoxStyle";
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 import AnimatedButton from "./helper/AnimatedButton";
+import { useSnackbar } from "./context/SnackbarContext";
 
 const QuotesView = () => {
     const navigation = useNavigation();
     const {criteria, data} = useRoute().params;
 
+    const { showMessage } = useSnackbar();
+
     const [quotes, setQuotes] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [neverShowMap, setNeverShowMap] = useState({});
 
-    const [messageVisible, setMessageVisible] = useState(false);
+
 
     const db = SQLite.useSQLiteContext();
 
@@ -54,15 +57,17 @@ const QuotesView = () => {
             setIsLoading(false);
         }
     }
-
+    
     useFocusEffect(
-      React.useCallback(() => {
-        loadQuotes();
-      }, [])
+        React.useCallback(()=>{
+            loadQuotes();
+        }, [])
     );
         
     if(isLoading) {
-        return ( <ActivityIndicator size='large' color='#0000f'/> ) ;
+        return ( <View style={{flex: 1, backgroundColor: Colors.appBlue.background}}>
+                    <ActivityIndicator size='large' color='#0000f'/>
+                </View> ) ;
     }
 
     const editQuote = (id) => {
@@ -82,7 +87,10 @@ const QuotesView = () => {
             },
             {
                 text: 'Yes',
-                onPress: () => {deleteQuote(id);}
+                onPress: () => {
+                    deleteQuote(id);
+                    showMessage('Quote successfully deleted!')
+                }
             }
         ])
     }
@@ -122,22 +130,6 @@ const QuotesView = () => {
     return(
         <SafeAreaView style={styles.container}>
 
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={messageVisible}
-                onRequestClose={setMessageVisible(!messageVisible)}
-                >
-                    <View style={styles.modal}>
-                        <Text> Yo whats up! This will be a generalized component! </Text>
-                            <AnimatedButton
-                            label="Close"
-                            labelFontSize={20}
-                            onPress={()=>{setMessageVisible(!messageVisible)}}
-                            />
-                    </View>
-            </Modal>
-
             <FlatList
                 data={quotes}
                 keyExtractor={(item, index) => index.toString()}
@@ -172,8 +164,8 @@ const QuotesView = () => {
                     </View>
                 )}
             >
-
             </FlatList>
+
         </SafeAreaView>
     )
 }

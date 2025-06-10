@@ -2,7 +2,6 @@ import { View, Text, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import logo from "@/assets/images/logo.png"
 import { Colors } from '@/constants/Colors'
-import toRGBA from './toRGBA'
 import { FontFamilies } from '@/constants/FontFamilies'
 
 const About = () => {
@@ -37,7 +36,7 @@ export default About
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: toRGBA(Colors.appBlue.background, 0.75),
+    backgroundColor: Colors.appBlue.background
   },
   info_container: {
     paddingHorizontal: 10,
