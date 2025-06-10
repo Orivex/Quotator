@@ -30,7 +30,7 @@ const Quote = () => {
       else if (nRows == 1) {
         result = await db.getAllAsync(`SELECT id, quote, author FROM quotes WHERE neverShow = 0`);
         if(result.length == 0) {
-          setRandomQuote({quote: 'The only quote that you have added is set to not be never shown on the home screen.', author: 'InformatiKater'})
+          setRandomQuote({quote: 'The only quote that you have added is set to never be shown on the home screen.', author: 'InformatiKater'})
         }
         else {
           setRandomQuote(result[0]);
