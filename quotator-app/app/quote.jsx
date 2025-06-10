@@ -7,24 +7,51 @@ import { useEffect, useState } from 'react'
 import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { pressInAnim, pressOutAnim } from './helper/animations.js'
+import { useQuote } from './context/QuoteContext.jsx'
 
 const Quote = () => {
   const navigation = useNavigation();
 
   const db = useSQLiteContext();
 
-  const [randomQuote, setRandomQuote] = useState({id: null, quote: '', author: ''});
-  const [reload, setReload] = useState(0);
+  const { randomQuote, setRandomQuote, reload, setReload } = useQuote();
 
   useEffect(() => {
 
     const loadRandomQuote = async () => {
-      const result = await db.getAllAsync(`SELECT id, quote, author FROM quotes WHERE id!='${randomQuote.id}' AND neverShow = 0 ORDER BY RANDOM() LIMIT 1`);
-      if(result.length > 0) {
-        setRandomQuote(result[0])
+       
+      let result = [];
+      const nRowsCall = await db.getAllAsync('SELECT COUNT(*) as count FROM quotes');
+      const nRows = nRowsCall[0].count;
+
+      if(nRows == 0) {
+        setRandomQuote({quote: 'This could be your quote.', author: 'InformatiKater'})
+      }
+      else if (nRows == 1) {
+        result = await db.getAllAsync(`SELECT id, quote, author FROM quotes WHERE neverShow = 0`);
+        if(result.length == 0) {
+          setRandomQuote({quote: 'The only quote that you have added is set to not be never shown on the home screen.', author: 'InformatiKater'})
+        }
+        else {
+          setRandomQuote(result[0]);
+        }
       }
       else {
-        setRandomQuote({quote: `This could be your quote!`, author: 'InformatiKater'})
+        result = await db.getAllAsync(`SELECT id, quote, author FROM quotes WHERE id!='${randomQuote.id}' AND neverShow = 0 ORDER BY RANDOM() LIMIT 1`);
+
+        if(result.length > 0) {
+          setRandomQuote(result[0]);
+        }
+        else {
+          const neverShow_nRows_Call = await db.getAllAsync('SELECT COUNT(*) as count FROM quotes WHERE neverShow = 1');
+          const neverShow_nRows = neverShow_nRows_Call[0].count;
+
+          console.log(neverShow_nRows);
+
+          if(neverShow_nRows == nRows) {
+            setRandomQuote({quote: 'You have set all quotes to not be shown on the home screen.', author: 'InformatiKater'})
+          }
+        }
       }
     };
 

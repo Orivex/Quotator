@@ -23,7 +23,7 @@ export const SnackbarProvider = ({children}) => {
     
                 visible={messageVisible}
                 onDismiss={()=>{setMessageVisible(false);}}
-                
+                duration={2000}
                 action={{
                   label: 'Close',
                   onPress: () => {

@@ -7,8 +7,11 @@ import * as SQLite from 'expo-sqlite'
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AnimatedButton from "./helper/AnimatedButton";
 import { useSnackbar } from "./context/SnackbarContext";
+import { useQuote } from "./context/QuoteContext";
 
 const QuoteForm = () => {
+
+    const { isHomeScreenQuote, reloadHomeScreenQuote, randomQuote, setRandomQuote } = useQuote();
 
     const navigation = useNavigation();
     const db = SQLite.useSQLiteContext();
@@ -58,6 +61,11 @@ const QuoteForm = () => {
                 navigation.goBack();
 
                 showMessage("Quote successfully changed!");
+
+                if(isHomeScreenQuote(id)) {
+                    const updatedResult = await db.getAllAsync(`SELECT id, quote, author FROM quotes WHERE id=${id}`);
+                    setRandomQuote(updatedResult[0]);
+                }
             }
             else {
                 await db.runAsync(

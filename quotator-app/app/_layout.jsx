@@ -5,6 +5,8 @@ import { SnackbarProvider } from './context/SnackbarContext';
 import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { useEffect } from 'react';
+import { View } from 'react-native';
+import { QuoteProvider } from './context/QuoteContext'; 
 
 SplashScreen.preventAutoHideAsync();
 
@@ -44,19 +46,23 @@ export default function RootLayout() {
         } }
         options={{ useNewConnection: true }}>
 
-        <SnackbarProvider>
-          <Stack screenOptions={{headerStyle: {backgroundColor: Colors.appBlue.background},
-                headerTintColor: Colors.appBlue.text, headerShadowVisible: false}}>
-            <Stack.Screen name="quote" options={{title: "Quote", headerShown: false}}/>
-            <Stack.Screen name="menu" options={{title: "Menu"}}/>
-            <Stack.Screen name="filterView" options={{title: "Filter"}}/>
-            <Stack.Screen name="about" options={{title: "About"}}/>
-            <Stack.Screen name="quoteForm" options={{title: "Form"}}/>
-            <Stack.Screen name="quotesView" options={{title: "Quotes"}}/>
-            <Stack.Screen name="+not-found" />
-          </Stack>
-        </SnackbarProvider>
-
+        <QuoteProvider>
+          <SnackbarProvider>
+            <View style={{flex: 1, backgroundColor: Colors.appBlue.background}}>
+              <Stack screenOptions={
+                    {headerStyle: {backgroundColor: Colors.appBlue.background},
+                    headerTintColor: Colors.appBlue.text, headerShadowVisible: false}}>
+                <Stack.Screen name="quote" options={{title: "Quote", headerShown: false}}/>
+                <Stack.Screen name="menu" options={{title: "Menu"}}/>
+                <Stack.Screen name="filterView" options={{title: "Filter"}}/>
+                <Stack.Screen name="about" options={{title: "About"}}/>
+                <Stack.Screen name="quoteForm" options={{title: "Form"}}/>
+                <Stack.Screen name="quotesView" options={{title: "Quotes"}}/>
+                <Stack.Screen name="+not-found" />
+              </Stack>
+            </View>
+          </SnackbarProvider>
+        </QuoteProvider>
     </SQLiteProvider>
   );
 }

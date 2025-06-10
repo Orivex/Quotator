@@ -10,6 +10,7 @@ import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import Entypo from '@expo/vector-icons/Entypo';
 import AnimatedButton from "./helper/AnimatedButton";
 import { useSnackbar } from "./context/SnackbarContext";
+import { useQuote } from "./context/QuoteContext";
 
 const QuotesView = () => {
     const navigation = useNavigation();
@@ -21,7 +22,7 @@ const QuotesView = () => {
     const [isLoading, setIsLoading] = useState(true);
     const [neverShowMap, setNeverShowMap] = useState({});
 
-
+    const { reloadHomeScreenQuote, isHomeScreenQuote } = useQuote();
 
     const db = SQLite.useSQLiteContext();
 
@@ -76,6 +77,9 @@ const QuotesView = () => {
 
     const deleteQuote = async (id) => {
         await db.runAsync(`DELETE FROM quotes WHERE id = '${id}'`);
+        if(isHomeScreenQuote(id)){
+            reloadHomeScreenQuote();
+        }
         loadQuotes();
     }
 
@@ -89,7 +93,7 @@ const QuotesView = () => {
                 text: 'Yes',
                 onPress: () => {
                     deleteQuote(id);
-                    showMessage('Quote successfully deleted!')
+                    showMessage('Quote successfully deleted!');
                 }
             }
         ])
@@ -104,6 +108,10 @@ const QuotesView = () => {
             ...prevMap,
             [id]: newIsNeverShown
         }))
+
+        if(isHomeScreenQuote(id)){
+            reloadHomeScreenQuote();
+        }
     }
 
     const neverShowAsk = (id) => {
@@ -126,7 +134,6 @@ const QuotesView = () => {
             toggleNeverShow(id, isNeverShown);
         }
     }
-
     return(
         <SafeAreaView style={styles.container}>
 
