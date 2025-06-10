@@ -1,4 +1,4 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext, useEffect } from 'react';
 import { Snackbar } from 'react-native-paper';
 
 const SnackbarContext = createContext({
@@ -20,8 +20,10 @@ export const SnackbarProvider = ({children}) => {
         <SnackbarContext.Provider value={{showMessage}}>
             {children}
             <Snackbar
+    
                 visible={messageVisible}
                 onDismiss={()=>{setMessageVisible(false);}}
+                
                 action={{
                   label: 'Close',
                   onPress: () => {

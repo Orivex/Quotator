@@ -1,7 +1,6 @@
 import { Animated, Pressable, Text, StyleSheet, useAnimatedValue } from 'react-native';
 import { pressInAnim, pressOutAnim } from './animations';
 import { Colors } from '@/constants/Colors';
-import { FontFamilies } from '@/constants/FontFamilies';
 
 const AnimatedButton = ({ label="", labelFontSize, useIcon=false, icon=null, onPress }) => {
   const scale = useAnimatedValue(1);
@@ -27,11 +26,12 @@ const styles = StyleSheet.create({
     borderRadius: 50,
     backgroundColor: Colors.appGray.base05,
     justifyContent: 'center',
+    alignItems: 'center'
   },
   buttonText: {
     color: Colors.appBlue.text,
-    fontFamily: FontFamilies.baseFont,
-    textAlign: "center",
+    fontFamily: 'baseFont',
+    textAlignVertical: 'center'
   },
 });
 

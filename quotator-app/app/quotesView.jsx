@@ -159,7 +159,7 @@ const QuotesView = () => {
 
                         </View>
 
-                        <Text style={styles.quoteText}>{item.quote}</Text>
+                        <Text style={styles.quoteText}>{`"${item.quote}"`}</Text>
                         <Text style={styles.authorText}>- {item.author}</Text>
                     </View>
                 )}

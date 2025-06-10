@@ -2,7 +2,8 @@ import { View, Text, Image, StyleSheet } from 'react-native'
 import React from 'react'
 import logo from "@/assets/images/logo.png"
 import { Colors } from '@/constants/Colors'
-import { FontFamilies } from '@/constants/FontFamilies'
+import AntDesign from '@expo/vector-icons/AntDesign';
+import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
 const About = () => {
   return (
@@ -13,17 +14,20 @@ const About = () => {
 
       <View>
 
-          <View style = {styles.info_container}>
+        <View style={styles.info_container}>
+          <AntDesign name="github" size={50} color={Colors.appBlue.background} /> 
+          <Text style={styles.info_text}> Orivex </Text>
+        </View>
 
-        <Text style = {[styles.info_text, {fontSize: 42}]}>
-          Quotator
-        </Text>
-        <Text style = {styles.info_text}> 
-          This app is the perfect way to always get remembered of quotes that you do not want to forget.
-        </Text>
-        <Text style = {[styles.info_text, {marginTop: 40}]}> Youtube: InformatiKater</Text>
-        <Text style = {styles.info_text}> Github: Blacklight7</Text>
-      </View>
+        <View style={styles.info_container}>
+          <AntDesign name="youtube" size={50} color={Colors.appBlue.background} />
+          <Text style={styles.info_text}> InformatiKater </Text>
+        </View>
+
+        <View style={styles.info_container}>
+          <FontAwesome6 name="discord" size={50} color={Colors.appBlue.background} />
+          <Text style={styles.info_text}> blacklight101 </Text>
+        </View>
 
       </View>
     </View>
@@ -36,16 +40,17 @@ export default About
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: Colors.appBlue.background
+    backgroundColor: 'white'
   },
   info_container: {
-    paddingHorizontal: 10,
-    alignItems: "flex-start"
+    marginVertical: 10,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   info_text: {
-    marginTop: 6,
     color: Colors.appBlue.text,
-    fontFamily: FontFamilies.baseFont
+    fontFamily: 'baseFont',
+    fontSize: 30,
   },
   image: {
     width: '100%', 

@@ -1,7 +1,6 @@
 import { View, Text, StyleSheet, Pressable, Animated, useAnimatedValue } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { Colors } from '@/constants/Colors'
-import { FontFamilies } from '@/constants/FontFamilies'
 import { quoteBoxStyle } from '@/constants/quoteBoxStyle'
 import { useSQLiteContext } from 'expo-sqlite'
 import { useEffect, useState } from 'react'
@@ -18,6 +17,7 @@ const Quote = () => {
   const [reload, setReload] = useState(0);
 
   useEffect(() => {
+
     const loadRandomQuote = async () => {
       const result = await db.getAllAsync(`SELECT id, quote, author FROM quotes WHERE id!='${randomQuote.id}' AND neverShow = 0 ORDER BY RANDOM() LIMIT 1`);
       if(result.length > 0) {
@@ -30,7 +30,6 @@ const Quote = () => {
 
     loadRandomQuote();
   }, [reload])
-
 
   const [menuVisible, setMenuVisible] = useState(false);
   const menuOpacity = useAnimatedValue(0);
@@ -99,7 +98,7 @@ const Quote = () => {
 
         <Animated.View style={{transform: [{scale: scaleHomeMenu}]}}>
           <Pressable style={styles.open} onPress={homeMenu} onPressIn={()=>{pressInAnim(scaleHomeMenu)}} onPressOut={()=>{pressOutAnim(scaleHomeMenu)}}>
-              <Feather name="loader" size={40} color={Colors.appGray.base} />
+              <Feather name="loader" size={40} color={menuVisible?Colors.appGray.base05:Colors.appGray.base} />
           </Pressable>
         </Animated.View>
         
@@ -159,7 +158,7 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: Colors.appBlue.text,
-    fontFamily: FontFamilies.baseFont,
+    fontFamily: 'baseFont',
     textAlign: 'center',
     fontSize: 25
   },

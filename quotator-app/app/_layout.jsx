@@ -1,17 +1,27 @@
-import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import { Colors } from '@/constants/Colors';
 import { SQLiteProvider } from 'expo-sqlite';
 import { SnackbarProvider } from './context/SnackbarContext';
+import * as SplashScreen from 'expo-splash-screen';
+import { useFonts } from 'expo-font';
+import { useEffect } from 'react';
+
+SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
 
-  const [loaded] = useFonts({
-    SpaceMono: require('../assets/fonts/SpaceMono-Regular.ttf'),
+  const [loaded, error] = useFonts({
+      'baseFont': require('@/assets/fonts/Plus_Jakarta_Sans/static/PlusJakartaSans-Regular.ttf'),
+      'quoteFont': require('@/assets/fonts/liberation_serif/LiberationSerif-Italic.ttf')
   });
 
-  if (!loaded) {
-    // Async font loading only occurs in development.
+  useEffect(()=> {
+    if(loaded || error) {
+      SplashScreen.hideAsync();
+    }
+  }, [loaded, error])
+
+  if (!loaded && !error) {
     return null;
   }
 

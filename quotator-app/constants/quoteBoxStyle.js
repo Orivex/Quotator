@@ -1,5 +1,4 @@
 import { Colors } from "./Colors"
-import { FontFamilies } from "./FontFamilies"
 
 export const quoteBoxStyle = {
     quoteContainer: {
@@ -11,7 +10,7 @@ export const quoteBoxStyle = {
     quoteText: {
         color: Colors.appBlue.text,
         fontSize: 25,
-        fontFamily: FontFamilies.quoteFont,
+        fontFamily: 'quoteFont',
         textAlign: 'left',
         paddingHorizontal: 20,
         paddingTop: 10,
@@ -19,7 +18,7 @@ export const quoteBoxStyle = {
     authorText: {
         color: Colors.appBlue.text,
         fontSize: 20,
-        fontFamily: FontFamilies.baseFont,
+        fontFamily: 'baseFont',
         textAlign: 'right',
         width: '85%',
         paddingRight: 20,

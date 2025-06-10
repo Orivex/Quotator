@@ -1,5 +1,4 @@
 import { Colors } from "@/constants/Colors"
-import { FontFamilies } from "@/constants/FontFamilies"
 import { useNavigation } from "@react-navigation/native"
 import { Pressable, StyleSheet } from "react-native"
 import { View, Text } from "react-native"
@@ -65,7 +64,7 @@ const styles = StyleSheet.create({
     },
     text: {
         color: Colors.appBlue.text,
-        fontFamily: FontFamilies.baseFont,
+        fontFamily: 'baseFont',
         fontSize: 20
     }
 })

@@ -4,15 +4,17 @@ import { View } from "react-native";
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { useEffect, useState } from "react";
 import * as SQLite from 'expo-sqlite'
-import { FontFamilies } from "@/constants/FontFamilies";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import AnimatedButton from "./helper/AnimatedButton";
+import { useSnackbar } from "./context/SnackbarContext";
 
 const QuoteForm = () => {
 
     const navigation = useNavigation();
     const db = SQLite.useSQLiteContext();
     const {id} = useRoute().params;
+
+    const { showMessage } = useSnackbar();
     
     const editMode = id != null;
 
@@ -21,7 +23,6 @@ const QuoteForm = () => {
         author: '',
         category: ''
     });
-
 
     useEffect(() => {
 
@@ -56,7 +57,7 @@ const QuoteForm = () => {
                 );
                 navigation.goBack();
 
-                Alert.alert("Quote successfully changed!");
+                showMessage("Quote successfully changed!");
             }
             else {
                 await db.runAsync(
@@ -64,7 +65,7 @@ const QuoteForm = () => {
                     [form.quote, form.author, finalCategory]
                 );
 
-                Alert.alert("Quote successfully added!");
+                showMessage("Quote successfully added!");
                 setForm({
                    quote: '',
                    author: '',
@@ -74,7 +75,6 @@ const QuoteForm = () => {
         
         }
         catch (error) {
-            console.error(error);
             Alert.alert('Error', error.message || 'Unknown error when adding quote')
         }
     };
@@ -130,7 +130,7 @@ const textInput_base = {
     color: Colors.appBlue.text,
     textAlignVertical: 'top',
     fontSize: 17,
-    fontFamily: FontFamilies.baseFont,
+    fontFamily: 'baseFont',
     borderRadius: 10,
     marginVertical: 12,
 }

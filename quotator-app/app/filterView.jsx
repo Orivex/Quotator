@@ -1,11 +1,11 @@
 import { StyleSheet, FlatList, View, Text, Pressable, ActivityIndicator, Animated, useAnimatedValue } from "react-native";
 import { Colors } from "@/constants/Colors";
-import { FontFamilies } from "@/constants/FontFamilies";
 import React, { useState } from 'react'
 import * as SQLite from 'expo-sqlite'
 import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AnimatedButton from './helper/AnimatedButton'
+
 
 const FilterView = () => {
 
@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: Colors.appBlue.text,
-        fontFamily: FontFamilies.baseFont,
+        fontFamily: 'baseFont',
         paddingHorizontal: 20,
         textAlign: "center",
         fontSize: 25
