@@ -6,7 +6,6 @@ import { useFocusEffect, useNavigation, useRoute } from "@react-navigation/nativ
 import { SafeAreaView } from "react-native-safe-area-context";
 import AnimatedButton from './helper/AnimatedButton'
 
-
 const FilterView = () => {
 
     const navigation = useNavigation();
@@ -98,13 +97,13 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         backgroundColor: Colors.appGray.base05,
         justifyContent: "center",
+        alignItems: 'center',
         paddingVertical: 10,
     },
     buttonText: {
         color: Colors.appBlue.text,
         fontFamily: 'baseFont',
         paddingHorizontal: 20,
-        textAlign: "center",
         fontSize: 25
     }
     

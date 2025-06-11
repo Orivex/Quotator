@@ -8,6 +8,7 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Feather from '@expo/vector-icons/Feather';
 import { pressInAnim, pressOutAnim } from './helper/animations.js'
 import { useQuote } from './context/QuoteContext.jsx'
+import AntDesign from '@expo/vector-icons/AntDesign';
 
 const Quote = () => {
   const navigation = useNavigation();
@@ -25,7 +26,7 @@ const Quote = () => {
       const nRows = nRowsCall[0].count;
 
       if(nRows == 0) {
-        setRandomQuote({quote: 'This could be your quote.', author: 'InformatiKater'})
+        setRandomQuote({quote: 'This could be your quote. Add a quote and reload to see your first quote!', author: 'InformatiKater'})
       }
       else if (nRows == 1) {
         result = await db.getAllAsync(`SELECT id, quote, author FROM quotes WHERE neverShow = 0`);
@@ -106,13 +107,13 @@ const Quote = () => {
 
     <View style={styles.container}>
 
-      <View style={styles.quoteSection}>
+      <Animated.View style={{transform: [{scale: scaleHomeMenu}]}}>
+        <Pressable style={styles.open} onPress={homeMenu} onPressIn={()=>{pressInAnim(scaleHomeMenu)}} onPressOut={()=>{pressOutAnim(scaleHomeMenu)}}>
+            <AntDesign name={menuVisible?'upcircle':'downcircle'} size={40} color={menuVisible?Colors.appGray.base05:Colors.appGray.base} />
+        </Pressable>
+      </Animated.View>
 
-        <Animated.View style={[styles.reload, {opacity: menuOpacity, transform: [{scale: scaleReload}, {rotate: rotationString}]}]}>
-            <Pressable disabled={!menuVisible} onPress={() => {setReload(prev => prev+1); rotate();}} onPressIn={()=>{pressInAnim(scaleReload)}} onPressOut={()=>{pressOutAnim(scaleReload)}}>
-                <Ionicons name="reload-circle" size={60} color={Colors.appGray.base} />
-            </Pressable>
-        </Animated.View>
+      <View style={styles.quoteSection}>
     
         <View style = {styles.quoteContainer}>
           <Text style = {styles.quoteText} adjustsFontSizeToFit={true} numberOfLines={8}>
@@ -123,9 +124,9 @@ const Quote = () => {
           </Text>
         </View>
 
-        <Animated.View style={{transform: [{scale: scaleHomeMenu}]}}>
-          <Pressable style={styles.open} onPress={homeMenu} onPressIn={()=>{pressInAnim(scaleHomeMenu)}} onPressOut={()=>{pressOutAnim(scaleHomeMenu)}}>
-              <Feather name="loader" size={40} color={menuVisible?Colors.appGray.base05:Colors.appGray.base} />
+        <Animated.View style={[styles.reload, {opacity: menuOpacity, transform: [{scale: scaleReload}, {rotate: rotationString}]}]}>
+          <Pressable disabled={!menuVisible} onPress={() => {setReload(prev => prev+1); rotate();}} onPressIn={()=>{pressInAnim(scaleReload)}} onPressOut={()=>{pressOutAnim(scaleReload)}}>
+              <Ionicons name="reload-circle" size={60} color={Colors.appGray.base} />
           </Pressable>
         </Animated.View>
         
@@ -191,7 +192,7 @@ const styles = StyleSheet.create({
   },
   reload: {
     marginHorizontal: 'auto',
-    marginBottom: 20
+    marginTop: 20
   },
   open: {
     marginHorizontal: 'auto',
