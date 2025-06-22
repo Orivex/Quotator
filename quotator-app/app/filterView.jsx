@@ -99,12 +99,5 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: 'center',
         paddingVertical: 10,
-    },
-    buttonText: {
-        color: Colors.appBlue.text,
-        fontFamily: 'baseFont',
-        paddingHorizontal: 20,
-        fontSize: 25
     }
-    
 })

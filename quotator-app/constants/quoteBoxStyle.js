@@ -20,10 +20,9 @@ export const quoteBoxStyle = {
         fontSize: 20,
         fontFamily: 'baseFont',
         textAlign: 'right',
-        width: '85%',
-        paddingRight: 20,
-        paddingTop: 30,
+        width: '75%',
+        marginTop: 20,
+        marginRight: 20,
         alignSelf: 'flex-end',
-       // backgroundColor: 'white'
     }
 }

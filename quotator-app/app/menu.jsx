@@ -15,7 +15,6 @@ const Menu = () => {
     ]
 
     const menu2 = [
-        { label: 'Rate the app', action: () => {}}, // TODO
         { label: 'About', action: () => {navigation.navigate("about")}}
     ]
 

@@ -36,10 +36,29 @@
         }
       ],
       "expo-sqlite",
-      "expo-font"
+      "expo-font",
+      [
+        "expo-updates",
+        {
+          "username": "blacklight101"
+        }
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "3a001ecf-9d7b-404b-a6f7-587a1269ab3d"
+      }
+    },
+    "runtimeVersion": "1.0.0",
+    "updates": {
+      "url": "https://u.expo.dev/3a001ecf-9d7b-404b-a6f7-587a1269ab3d",
+      "fallbackToCacheTimeout": 0
+    },
+    "jsEngine": "hermes"
   }
 }

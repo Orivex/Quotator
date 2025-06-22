@@ -6,7 +6,7 @@ const QuoteContext = createContext({
 });
 
 export const QuoteProvider = ({children}) => {
-    const [randomQuote, setRandomQuote] = useState({id: null, quote: '', author: ''});
+    const [randomQuote, setRandomQuote] = useState({id: null, quote: 'Loading...', author: 'Loading...'});
     const [reload, setReload] = useState(0);
 
     const isHomeScreenQuote = (id) => {

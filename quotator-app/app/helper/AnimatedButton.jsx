@@ -13,7 +13,7 @@ const AnimatedButton = ({ label="", labelFontSize, useIcon=false, icon=null, onP
         onPressOut={() => pressOutAnim(scale)}
         style={useIcon ? null: styles.button}
       >
-      {useIcon ? icon: <Text style={[styles.buttonText, {fontSize: labelFontSize}]}>{label}</Text>}
+      {useIcon ? icon: <Text numberOfLines={4} style={[styles.buttonText, {fontSize: labelFontSize}]}>{label}</Text>}
       </Pressable>
     </Animated.View>
   );
@@ -21,8 +21,7 @@ const AnimatedButton = ({ label="", labelFontSize, useIcon=false, icon=null, onP
 
 const styles = StyleSheet.create({
   button: {
-    minHeight: 75,
-    width: 250,
+    width: 275,
     borderRadius: 50,
     backgroundColor: Colors.appGray.base05,
     justifyContent: 'center',
@@ -31,7 +30,9 @@ const styles = StyleSheet.create({
   buttonText: {
     color: Colors.appBlue.text,
     fontFamily: 'baseFont',
-    textAlignVertical: 'center'
+    textAlign: 'center',
+    paddingHorizontal: 10,
+    paddingVertical: 30
   },
 });
 

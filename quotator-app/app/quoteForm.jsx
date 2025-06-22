@@ -95,6 +95,7 @@ const QuoteForm = () => {
                 numberOfLines={10}
                 maxLength={300}
                 placeholder="Quote"
+                placeholderTextColor={Colors.appBlue.text}
                 value={form.quote}
                 style={styles.textInput_quote}
                 onChangeText={(text) => setForm({...form, quote: text})}
@@ -102,8 +103,9 @@ const QuoteForm = () => {
             <TextInput 
                 multiline
                 numberOfLines={2}
-                maxLength={80}
+                maxLength={70}
                 placeholder="Author"
+                placeholderTextColor={Colors.appBlue.text}
                 value={form.author}
                 style={styles.textInput_author}
                 onChangeText={(text) => setForm({...form, author: text})}
@@ -113,6 +115,7 @@ const QuoteForm = () => {
                 numberOfLines={10}
                 maxLength={70}
                 placeholder="Category (Optional)"
+                placeholderTextColor={Colors.appBlue.text}
                 value={form.category}
                 style={styles.textInput_category}
                 onChangeText={(text) => setForm({...form, category: text})}

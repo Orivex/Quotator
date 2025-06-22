@@ -18,6 +18,9 @@ export default function RootLayout() {
   });
 
   useEffect(()=> {
+
+    console.log("Loading data...");
+
     if(loaded || error) {
       SplashScreen.hideAsync();
     }
@@ -33,16 +36,23 @@ export default function RootLayout() {
       
       databaseName='quotes.db'
           onInit={async (db) => {
-          await db.execAsync(`
-          CREATE TABLE IF NOT EXISTS quotes (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          author TEXT NOT NULL,
-          quote TEXT NOT NULL,
-          category TEXT NOT NULL,
-          neverShow BOOLEAN NOT NULL
-          );
-          PRAGMA journal_mode=WAL;
-          `)
+
+          try{
+            await db.execAsync(`
+            CREATE TABLE IF NOT EXISTS quotes (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            author TEXT NOT NULL,
+            quote TEXT NOT NULL,
+            category TEXT NOT NULL,
+            neverShow BOOLEAN NOT NULL
+            );
+            PRAGMA journal_mode=WAL;
+            `)
+
+          }
+          catch(err) {
+            console.error("SQLite onInit failed:", err);
+          }
         } }
         options={{ useNewConnection: true }}>
 
@@ -52,7 +62,7 @@ export default function RootLayout() {
               <Stack screenOptions={
                     {headerStyle: {backgroundColor: Colors.appBlue.background},
                     headerTintColor: Colors.appBlue.text, headerShadowVisible: false}}>
-                <Stack.Screen name="quote" options={{title: "Quote", headerShown: false}}/>
+                <Stack.Screen name="index" options={{title: "Quote", headerShown: false}}/>
                 <Stack.Screen name="menu" options={{title: "Menu"}}/>
                 <Stack.Screen name="filterView" options={{title: "Filter"}}/>
                 <Stack.Screen name="about" options={{title: "About"}}/>

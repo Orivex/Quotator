@@ -166,10 +166,11 @@ const QuotesView = () => {
 
                         </View>
 
-                        <Text style={styles.quoteText}>{`"${item.quote}"`}</Text>
-                        <Text style={styles.authorText}>- {item.author}</Text>
+                        <Text adjustsFontSizeToFit={true} numberOfLines={10} style={styles.quoteText}>{`"${item.quote}"`}</Text>
+                        <Text adjustsFontSizeToFit={true} numberOfLines={2} style={styles.authorText}>- {item.author}</Text>
                     </View>
                 )}
+                ListEmptyComponent={<Text style={{alignSelf: 'center'}}>No data found</Text>}
             >
             </FlatList>
 
@@ -204,9 +205,6 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-around',
         paddingLeft: 10
-    },
-    modal: {
-        backgroundColor: 'white'
     }
 
 })
